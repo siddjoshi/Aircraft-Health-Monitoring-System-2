@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { AlertTriangle, Zap, Fuel, Activity, Play, Square } from 'lucide-react';
+import { useThemeClasses } from '../hooks/useThemeClasses';
 
 /**
  * Anomaly Controls component for triggering test anomalies
@@ -11,6 +12,7 @@ import { AlertTriangle, Zap, Fuel, Activity, Play, Square } from 'lucide-react';
  * @version 1.0.0
  */
 const AnomalyControls = () => {
+  const { card, textPrimary, textSecondary } = useThemeClasses();
   const [isLoading, setIsLoading] = useState(false);
   const [lastTriggered, setLastTriggered] = useState(null);
 
@@ -65,33 +67,33 @@ const AnomalyControls = () => {
   ];
 
   return (
-    <div className="bg-card-bg border border-border-color rounded-lg p-6">
+    <div className={`${card} p-6`}>
       <div className="flex items-center justify-between mb-4">
-        <h3 className="text-lg font-semibold text-white flex items-center">
+        <h3 className={`text-lg font-semibold ${textPrimary} flex items-center`}>
           <AlertTriangle className="w-5 h-5 mr-2 text-aviation-yellow" />
           Anomaly Simulation Controls
         </h3>
-        <div className="text-xs text-gray-400">
+        <div className={`text-xs ${textSecondary}`}>
           For testing purposes only
         </div>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         {anomalies.map((anomaly) => (
-          <div key={anomaly.type} className="border border-border-color rounded-lg p-4">
+          <div key={anomaly.type} className={`${card} p-4`}>
             <div className="flex items-center justify-between mb-2">
               <div className="flex items-center">
                 <div className="text-aviation-yellow mr-2">
                   {anomaly.icon}
                 </div>
-                <h4 className="font-semibold text-white">{anomaly.name}</h4>
+                <h4 className={`font-semibold ${textPrimary}`}>{anomaly.name}</h4>
               </div>
               {lastTriggered === anomaly.type && (
                 <div className="w-2 h-2 bg-aviation-green rounded-full animate-pulse"></div>
               )}
             </div>
             
-            <p className="text-sm text-gray-400 mb-4">
+            <p className={`text-sm ${textSecondary} mb-4`}>
               {anomaly.description}
             </p>
             
