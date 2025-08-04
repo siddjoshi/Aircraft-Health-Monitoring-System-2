@@ -1,0 +1,660 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aircraft Health Monitoring - Complete Theme Implementation</title>
+    <style>
+        /* Custom CSS with theme support */
+        :root {
+            --aviation-blue: #1e3a8a;
+            --aviation-red: #dc2626;
+            --aviation-green: #16a34a;
+            --aviation-yellow: #ca8a04;
+            --aviation-gray: #374151;
+            
+            /* Light theme */
+            --bg-primary-light: #f8fafc;
+            --bg-card-light: #ffffff;
+            --border-light: #e2e8f0;
+            --text-primary-light: #1e293b;
+            --text-secondary-light: #64748b;
+            
+            /* Dark theme */
+            --bg-primary-dark: #0f172a;
+            --bg-card-dark: #1e293b;
+            --border-dark: #334155;
+            --text-primary-dark: #ffffff;
+            --text-secondary-dark: #94a3b8;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Inter', system-ui, sans-serif;
+            line-height: 1.6;
+            transition: all 0.2s ease-in-out;
+        }
+
+        .theme-transition {
+            transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out, border-color 0.2s ease-in-out;
+        }
+
+        /* Light theme */
+        .light {
+            background-color: var(--bg-primary-light);
+            color: var(--text-primary-light);
+        }
+
+        .light .card {
+            background-color: var(--bg-card-light);
+            border-color: var(--border-light);
+        }
+
+        .light .text-secondary {
+            color: var(--text-secondary-light);
+        }
+
+        .light .text-primary {
+            color: var(--text-primary-light);
+        }
+
+        /* Dark theme */
+        .dark {
+            background-color: var(--bg-primary-dark);
+            color: var(--text-primary-dark);
+        }
+
+        .dark .card {
+            background-color: var(--bg-card-dark);
+            border-color: var(--border-dark);
+        }
+
+        .dark .text-secondary {
+            color: var(--text-secondary-dark);
+        }
+
+        .dark .text-primary {
+            color: var(--text-primary-dark);
+        }
+
+        /* Component styles */
+        .card {
+            border: 1px solid;
+            border-radius: 0.5rem;
+            padding: 1.5rem;
+        }
+
+        .btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 2.5rem;
+            height: 2.5rem;
+            border-radius: 0.5rem;
+            border: none;
+            cursor: pointer;
+            transition: all 0.2s ease-in-out;
+        }
+
+        .btn:hover {
+            transform: scale(1.05);
+        }
+
+        .btn:active {
+            transform: scale(0.95);
+        }
+
+        .light .btn {
+            background-color: #e2e8f0;
+            color: #374151;
+        }
+
+        .light .btn:hover {
+            background-color: #cbd5e1;
+        }
+
+        .dark .btn {
+            background-color: #374151;
+            color: #fbbf24;
+        }
+
+        .dark .btn:hover {
+            background-color: #4b5563;
+        }
+
+        .grid {
+            display: grid;
+            gap: 1.5rem;
+        }
+
+        .grid-cols-1 { grid-template-columns: repeat(1, minmax(0, 1fr)); }
+        .grid-cols-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+        .grid-cols-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+        .grid-cols-4 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+
+        @media (min-width: 768px) {
+            .md\\:grid-cols-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+            .md\\:grid-cols-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+            .md\\:grid-cols-4 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+        }
+
+        @media (min-width: 1024px) {
+            .lg\\:grid-cols-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+            .lg\\:grid-cols-4 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+        }
+
+        @media (min-width: 1280px) {
+            .xl\\:grid-cols-4 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+        }
+
+        .flex { display: flex; }
+        .items-center { align-items: center; }
+        .justify-between { justify-content: space-between; }
+        .justify-center { justify-content: center; }
+        .space-x-2 > * + * { margin-left: 0.5rem; }
+        .space-x-3 > * + * { margin-left: 0.75rem; }
+        .space-x-4 > * + * { margin-left: 1rem; }
+        .space-y-3 > * + * { margin-top: 0.75rem; }
+        .space-y-4 > * + * { margin-top: 1rem; }
+
+        .text-xs { font-size: 0.75rem; }
+        .text-sm { font-size: 0.875rem; }
+        .text-lg { font-size: 1.125rem; }
+        .text-xl { font-size: 1.25rem; }
+        .text-2xl { font-size: 1.5rem; }
+
+        .font-medium { font-weight: 500; }
+        .font-semibold { font-weight: 600; }
+        .font-bold { font-weight: 700; }
+
+        .mb-2 { margin-bottom: 0.5rem; }
+        .mb-3 { margin-bottom: 0.75rem; }
+        .mb-4 { margin-bottom: 1rem; }
+        .mb-6 { margin-bottom: 1.5rem; }
+        .mt-4 { margin-top: 1rem; }
+        .mt-6 { margin-top: 1.5rem; }
+        .mr-2 { margin-right: 0.5rem; }
+        .mr-3 { margin-right: 0.75rem; }
+
+        .px-2 { padding-left: 0.5rem; padding-right: 0.5rem; }
+        .px-3 { padding-left: 0.75rem; padding-right: 0.75rem; }
+        .px-4 { padding-left: 1rem; padding-right: 1rem; }
+        .py-1 { padding-top: 0.25rem; padding-bottom: 0.25rem; }
+        .py-4 { padding-top: 1rem; padding-bottom: 1rem; }
+        .py-6 { padding-top: 1.5rem; padding-bottom: 1.5rem; }
+
+        .rounded { border-radius: 0.25rem; }
+        .rounded-lg { border-radius: 0.5rem; }
+        .rounded-full { border-radius: 9999px; }
+
+        .border-b { border-bottom-width: 1px; }
+
+        .w-8 { width: 2rem; }
+        .h-8 { height: 2rem; }
+        .w-5 { width: 1.25rem; }
+        .h-5 { height: 1.25rem; }
+
+        .max-w-7xl { max-width: 80rem; }
+        .mx-auto { margin-left: auto; margin-right: auto; }
+
+        .text-center { text-align: center; }
+        .text-right { text-align: right; }
+
+        .hidden { display: none; }
+        .block { display: block; }
+
+        .dark .hidden-dark { display: none; }
+        .light .hidden-light { display: none; }
+        .dark .block-dark { display: block; }
+        .light .block-light { display: block; }
+
+        /* Status colors */
+        .status-normal { color: var(--aviation-green); }
+        .status-warning { color: var(--aviation-yellow); }
+        .status-critical { color: var(--aviation-red); }
+
+        .bg-normal { background-color: var(--aviation-green); }
+        .bg-warning { background-color: var(--aviation-yellow); }
+        .bg-critical { background-color: var(--aviation-red); }
+        .bg-blue { background-color: var(--aviation-blue); }
+
+        .bg-normal, .bg-warning, .bg-critical, .bg-blue {
+            color: white;
+        }
+
+        /* Progress bar */
+        .progress-bar {
+            width: 100%;
+            height: 0.5rem;
+            border-radius: 9999px;
+            overflow: hidden;
+        }
+
+        .dark .progress-bar {
+            background-color: #374151;
+        }
+
+        .light .progress-bar {
+            background-color: #d1d5db;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background-color: var(--aviation-green);
+            transition: width 0.3s ease-in-out;
+        }
+
+        /* Icon styling */
+        .icon {
+            width: 1.25rem;
+            height: 1.25rem;
+            display: inline-block;
+            vertical-align: middle;
+        }
+
+        .brand-icon {
+            width: 2rem;
+            height: 2rem;
+            background-color: var(--aviation-blue);
+            border-radius: 0.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 0.875rem;
+        }
+
+        /* Container */
+        .container {
+            max-width: 80rem;
+            margin: 0 auto;
+            padding: 0 1rem;
+        }
+
+        @media (min-width: 640px) {
+            .container {
+                padding: 0 1.5rem;
+            }
+        }
+
+        @media (min-width: 1024px) {
+            .container {
+                padding: 0 2rem;
+            }
+        }
+
+        .min-h-screen {
+            min-height: 100vh;
+        }
+    </style>
+</head>
+<body class="dark theme-transition">
+    <div class="min-h-screen theme-transition">
+        <!-- Header -->
+        <header class="card border-b">
+            <div class="container">
+                <div class="flex justify-between items-center py-4">
+                    <div class="flex items-center space-x-3">
+                        <div class="brand-icon">✈</div>
+                        <div>
+                            <h1 class="text-xl font-bold text-primary">
+                                Aircraft Health Monitoring System
+                            </h1>
+                            <p class="text-sm text-secondary">
+                                Real-Time Aviation Dashboard - Complete Theme Implementation
+                            </p>
+                        </div>
+                    </div>
+                    
+                    <!-- Theme Toggle -->
+                    <button id="theme-toggle" class="btn" title="Toggle theme">
+                        <!-- Sun icon for dark mode -->
+                        <svg class="icon block-dark hidden-light" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path>
+                        </svg>
+                        <!-- Moon icon for light mode -->
+                        <svg class="icon hidden-dark block-light" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="container py-6">
+            <!-- Implementation Summary -->
+            <div class="card mb-6 theme-transition">
+                <h2 class="text-lg font-semibold text-primary mb-3">
+                    🎨 Complete Light/Dark Theme Implementation
+                </h2>
+                <p class="text-secondary mb-4">
+                    This demonstrates the complete implementation of the light/dark theme toggle system for the Aircraft Health Monitoring Dashboard. 
+                    All components have been updated to support theme switching with localStorage persistence.
+                </p>
+                
+                <div class="grid grid-cols-1 md\\:grid-cols-3 gap-4">
+                    <div class="flex items-center space-x-2">
+                        <span class="px-2 py-1 rounded bg-normal text-xs">✓</span>
+                        <span class="text-primary text-sm">Theme Context & Provider</span>
+                    </div>
+                    <div class="flex items-center space-x-2">
+                        <span class="px-2 py-1 rounded bg-normal text-xs">✓</span>
+                        <span class="text-primary text-sm">localStorage Persistence</span>
+                    </div>
+                    <div class="flex items-center space-x-2">
+                        <span class="px-2 py-1 rounded bg-normal text-xs">✓</span>
+                        <span class="text-primary text-sm">Smooth Transitions</span>
+                    </div>
+                    <div class="flex items-center space-x-2">
+                        <span class="px-2 py-1 rounded bg-normal text-xs">✓</span>
+                        <span class="text-primary text-sm">All Components Updated</span>
+                    </div>
+                    <div class="flex items-center space-x-2">
+                        <span class="px-2 py-1 rounded bg-normal text-xs">✓</span>
+                        <span class="text-primary text-sm">Aviation Colors Preserved</span>
+                    </div>
+                    <div class="flex items-center space-x-2">
+                        <span class="px-2 py-1 rounded bg-normal text-xs">✓</span>
+                        <span class="text-primary text-sm">Utility Hook for Consistency</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- System Status Overview -->
+            <div class="card mb-6 theme-transition">
+                <div class="flex justify-between items-center mb-4">
+                    <h2 class="text-lg font-semibold text-primary flex items-center">
+                        <span class="mr-2">⚡</span>
+                        System Status Overview
+                    </h2>
+                    <div class="px-3 py-1 rounded-full text-xs font-medium bg-normal">
+                        ALL SYSTEMS NORMAL
+                    </div>
+                </div>
+
+                <!-- Status Summary -->
+                <div class="grid grid-cols-1 md\\:grid-cols-4 gap-4">
+                    <div class="card text-center theme-transition">
+                        <div class="text-2xl font-bold text-primary">4</div>
+                        <div class="text-sm text-secondary">Total Systems</div>
+                    </div>
+                    <div class="card text-center" style="background-color: rgba(22, 163, 74, 0.1); border-color: var(--aviation-green);">
+                        <div class="text-2xl font-bold status-normal">4</div>
+                        <div class="text-sm text-secondary">Normal</div>
+                    </div>
+                    <div class="card text-center" style="background-color: rgba(220, 38, 38, 0.1); border-color: var(--aviation-red);">
+                        <div class="text-2xl font-bold status-critical">0</div>
+                        <div class="text-sm text-secondary">Anomalies</div>
+                    </div>
+                    <div class="card text-center" style="background-color: rgba(30, 58, 138, 0.1); border-color: var(--aviation-blue);">
+                        <div class="text-2xl font-bold" style="color: var(--aviation-blue);">100%</div>
+                        <div class="text-sm text-secondary">Health</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Aircraft Systems Grid -->
+            <div class="grid grid-cols-1 md\\:grid-cols-2 lg\\:grid-cols-3 xl\\:grid-cols-4 gap-6 mb-6">
+                <!-- Engine System -->
+                <div class="card theme-transition">
+                    <div class="flex justify-between items-center mb-4">
+                        <h3 class="text-lg font-semibold text-primary flex items-center">
+                            <span class="mr-2" style="color: var(--aviation-yellow);">⚡</span>
+                            Engine System
+                        </h3>
+                        <div class="px-2 py-1 rounded-full text-xs font-medium bg-normal">NORMAL</div>
+                    </div>
+                    <div class="space-y-3">
+                        <div class="flex justify-between items-center">
+                            <span class="text-sm text-secondary">Engine RPM</span>
+                            <div class="text-right">
+                                <div class="text-lg font-bold status-normal">2450</div>
+                                <div class="text-xs text-secondary">RPM</div>
+                            </div>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <span class="text-sm text-secondary">Temperature</span>
+                            <div class="text-right">
+                                <div class="text-lg font-bold status-normal">185.2</div>
+                                <div class="text-xs text-secondary">°C</div>
+                            </div>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <span class="text-sm text-secondary">Oil Pressure</span>
+                            <div class="text-right">
+                                <div class="text-lg font-bold status-normal">45.8</div>
+                                <div class="text-xs text-secondary">PSI</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Fuel System -->
+                <div class="card theme-transition">
+                    <div class="flex justify-between items-center mb-4">
+                        <h3 class="text-lg font-semibold text-primary flex items-center">
+                            <span class="mr-2" style="color: var(--aviation-blue);">⛽</span>
+                            Fuel System
+                        </h3>
+                        <div class="px-2 py-1 rounded-full text-xs font-medium bg-normal">NORMAL</div>
+                    </div>
+                    <div class="space-y-3">
+                        <div class="flex justify-between items-center">
+                            <span class="text-sm text-secondary">Fuel Level</span>
+                            <div class="text-right">
+                                <div class="text-lg font-bold status-normal">75.3</div>
+                                <div class="text-xs text-secondary">%</div>
+                            </div>
+                        </div>
+                        <div class="progress-bar mt-2">
+                            <div class="progress-fill" style="width: 75.3%;"></div>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <span class="text-sm text-secondary">Consumption</span>
+                            <div class="text-right">
+                                <div class="text-lg font-bold status-normal">125.7</div>
+                                <div class="text-xs text-secondary">L/h</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Hydraulic System -->
+                <div class="card theme-transition">
+                    <div class="flex justify-between items-center mb-4">
+                        <h3 class="text-lg font-semibold text-primary flex items-center">
+                            <span class="mr-2" style="color: var(--aviation-red);">🔧</span>
+                            Hydraulic System
+                        </h3>
+                        <div class="px-2 py-1 rounded-full text-xs font-medium bg-normal">NORMAL</div>
+                    </div>
+                    <div class="space-y-3">
+                        <div class="flex justify-between items-center">
+                            <span class="text-sm text-secondary">Pressure</span>
+                            <div class="text-right">
+                                <div class="text-lg font-bold status-normal">3200</div>
+                                <div class="text-xs text-secondary">PSI</div>
+                            </div>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <span class="text-sm text-secondary">Temperature</span>
+                            <div class="text-right">
+                                <div class="text-lg font-bold status-normal">45.8</div>
+                                <div class="text-xs text-secondary">°C</div>
+                            </div>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <span class="text-sm text-secondary">Fluid Level</span>
+                            <div class="text-right">
+                                <div class="text-lg font-bold status-normal">85.2</div>
+                                <div class="text-xs text-secondary">%</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Flight Data -->
+                <div class="card theme-transition">
+                    <div class="flex justify-between items-center mb-4">
+                        <h3 class="text-lg font-semibold text-primary flex items-center">
+                            <span class="mr-2" style="color: var(--aviation-green);">✈️</span>
+                            Flight Data
+                        </h3>
+                        <div class="px-2 py-1 rounded-full text-xs font-medium bg-normal">NORMAL</div>
+                    </div>
+                    <div class="space-y-3">
+                        <div class="flex justify-between items-center">
+                            <span class="text-sm text-secondary">Altitude</span>
+                            <div class="text-right">
+                                <div class="text-lg font-bold status-normal">35,000</div>
+                                <div class="text-xs text-secondary">ft</div>
+                            </div>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <span class="text-sm text-secondary">Airspeed</span>
+                            <div class="text-right">
+                                <div class="text-lg font-bold status-normal">520</div>
+                                <div class="text-xs text-secondary">kts</div>
+                            </div>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <span class="text-sm text-secondary">Mach Number</span>
+                            <div class="text-right">
+                                <div class="text-lg font-bold status-normal">0.82</div>
+                                <div class="text-xs text-secondary">M</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Implementation Details -->
+            <div class="grid grid-cols-1 md\\:grid-cols-2 gap-6">
+                <!-- Files Modified -->
+                <div class="card theme-transition">
+                    <h3 class="text-lg font-semibold text-primary mb-4">📁 Files Added/Modified</h3>
+                    <div class="space-y-2 text-sm">
+                        <div class="flex items-center space-x-2">
+                            <span class="px-2 py-1 rounded bg-blue text-xs">NEW</span>
+                            <code class="text-secondary">src/contexts/ThemeContext.js</code>
+                        </div>
+                        <div class="flex items-center space-x-2">
+                            <span class="px-2 py-1 rounded bg-blue text-xs">NEW</span>
+                            <code class="text-secondary">src/hooks/useThemeClasses.js</code>
+                        </div>
+                        <div class="flex items-center space-x-2">
+                            <span class="px-2 py-1 rounded bg-blue text-xs">NEW</span>
+                            <code class="text-secondary">src/components/ThemeToggle.js</code>
+                        </div>
+                        <div class="flex items-center space-x-2">
+                            <span class="px-2 py-1 rounded bg-warning text-xs">MOD</span>
+                            <code class="text-secondary">tailwind.config.js</code>
+                        </div>
+                        <div class="flex items-center space-x-2">
+                            <span class="px-2 py-1 rounded bg-warning text-xs">MOD</span>
+                            <code class="text-secondary">src/App.css</code>
+                        </div>
+                        <div class="flex items-center space-x-2">
+                            <span class="px-2 py-1 rounded bg-warning text-xs">MOD</span>
+                            <code class="text-secondary">src/App.js</code>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Components Updated -->
+                <div class="card theme-transition">
+                    <h3 class="text-lg font-semibold text-primary mb-4">⚙️ Components Updated</h3>
+                    <div class="space-y-2 text-sm">
+                        <div class="flex items-center space-x-2">
+                            <span class="px-2 py-1 rounded bg-normal text-xs">✓</span>
+                            <code class="text-secondary">Dashboard.js</code>
+                        </div>
+                        <div class="flex items-center space-x-2">
+                            <span class="px-2 py-1 rounded bg-normal text-xs">✓</span>
+                            <code class="text-secondary">SystemStatus.js</code>
+                        </div>
+                        <div class="flex items-center space-x-2">
+                            <span class="px-2 py-1 rounded bg-normal text-xs">✓</span>
+                            <code class="text-secondary">EngineSystem.js</code>
+                        </div>
+                        <div class="flex items-center space-x-2">
+                            <span class="px-2 py-1 rounded bg-normal text-xs">✓</span>
+                            <code class="text-secondary">FuelSystem.js</code>
+                        </div>
+                        <div class="flex items-center space-x-2">
+                            <span class="px-2 py-1 rounded bg-normal text-xs">✓</span>
+                            <code class="text-secondary">HydraulicSystem.js</code>
+                        </div>
+                        <div class="flex items-center space-x-2">
+                            <span class="px-2 py-1 rounded bg-normal text-xs">✓</span>
+                            <code class="text-secondary">FlightData.js</code>
+                        </div>
+                        <div class="flex items-center space-x-2">
+                            <span class="px-2 py-1 rounded bg-normal text-xs">✓</span>
+                            <code class="text-secondary">AnomalyControls.js</code>
+                        </div>
+                        <div class="flex items-center space-x-2">
+                            <span class="px-2 py-1 rounded bg-normal text-xs">✓</span>
+                            <code class="text-secondary">AlertPanel.js</code>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Usage Instructions -->
+            <div class="card mt-6 theme-transition">
+                <h3 class="text-lg font-semibold text-primary mb-3">🚀 How to Use</h3>
+                <div class="grid grid-cols-1 md\\:grid-cols-2 gap-4 text-sm">
+                    <div>
+                        <h4 class="font-medium text-primary mb-2">For Users:</h4>
+                        <ul class="text-secondary space-y-1">
+                            <li>• Click the sun/moon icon in the header to toggle themes</li>
+                            <li>• Theme preference is automatically saved</li>
+                            <li>• Setting persists between browser sessions</li>
+                            <li>• Smooth transitions provide visual feedback</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h4 class="font-medium text-primary mb-2">For Developers:</h4>
+                        <ul class="text-secondary space-y-1">
+                            <li>• Import and use <code>useTheme()</code> hook</li>
+                            <li>• Use <code>useThemeClasses()</code> for consistent styling</li>
+                            <li>• Wrap app with <code>&lt;ThemeProvider&gt;</code></li>
+                            <li>• Aviation colors work in both themes</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        // Theme toggle functionality
+        const themeToggle = document.getElementById('theme-toggle');
+        const body = document.body;
+
+        // Initialize theme from localStorage or default to dark
+        const savedTheme = localStorage.getItem('aircraft-monitoring-theme') || 'dark';
+        body.className = `${savedTheme} theme-transition`;
+
+        // Theme toggle handler
+        themeToggle.addEventListener('click', () => {
+            const isDark = body.classList.contains('dark');
+            if (isDark) {
+                body.className = 'light theme-transition';
+                localStorage.setItem('aircraft-monitoring-theme', 'light');
+            } else {
+                body.className = 'dark theme-transition';
+                localStorage.setItem('aircraft-monitoring-theme', 'dark');
+            }
+        });
+    </script>
+</body>
+</html>

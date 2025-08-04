@@ -1,5 +1,6 @@
 import React from 'react';
 import { Fuel, Gauge, Thermometer, TrendingDown } from 'lucide-react';
+import { useThemeClasses } from '../hooks/useThemeClasses';
 
 /**
  * Fuel System component for displaying fuel-related sensor data
@@ -11,6 +12,7 @@ import { Fuel, Gauge, Thermometer, TrendingDown } from 'lucide-react';
  * @version 1.0.0
  */
 const FuelSystem = ({ data, hasAnomaly }) => {
+  const { card, textPrimary, textSecondary } = useThemeClasses();
   const getStatusColor = (value, min, max, criticalMin = null) => {
     if (criticalMin && value < criticalMin) return 'text-aviation-red';
     if (value < min || value > max) return 'text-aviation-yellow';
@@ -24,18 +26,18 @@ const FuelSystem = ({ data, hasAnomaly }) => {
   };
 
   return (
-    <div className={`bg-card-bg border border-border-color rounded-lg p-6 ${
+    <div className={`${card} rounded-lg p-6 ${
       hasAnomaly ? 'border-aviation-red shadow-lg shadow-aviation-red/20' : ''
     }`}>
       <div className="flex items-center justify-between mb-4">
-        <h3 className="text-lg font-semibold text-white flex items-center">
+        <h3 className="text-lg font-semibold ${textPrimary} flex items-center">
           <Fuel className="w-5 h-5 mr-2 text-aviation-blue" />
           Fuel System
         </h3>
         <div className={`px-2 py-1 rounded-full text-xs font-medium ${
           hasAnomaly 
-            ? 'bg-aviation-red text-white' 
-            : 'bg-aviation-green text-white'
+            ? 'bg-aviation-red ${textPrimary}' 
+            : 'bg-aviation-green ${textPrimary}'
         }`}>
           {hasAnomaly ? 'ANOMALY' : 'NORMAL'}
         </div>
@@ -45,8 +47,8 @@ const FuelSystem = ({ data, hasAnomaly }) => {
         {/* Fuel Level */}
         <div className="flex items-center justify-between">
           <div className="flex items-center">
-            <Gauge className="w-4 h-4 mr-2 text-gray-400" />
-            <span className="text-sm text-gray-400">Fuel Level</span>
+            <Gauge className="w-4 h-4 mr-2 ${textSecondary}" />
+            <span className="text-sm ${textSecondary}">Fuel Level</span>
           </div>
           <div className="text-right">
             <div className={`text-lg font-mono font-semibold ${
@@ -54,15 +56,15 @@ const FuelSystem = ({ data, hasAnomaly }) => {
             }`}>
               {data.fuelLevel?.toFixed(1) || 'N/A'}
             </div>
-            <div className="text-xs text-gray-500">%</div>
+            <div className="text-xs ${textSecondary}">%</div>
           </div>
         </div>
 
         {/* Fuel Consumption */}
         <div className="flex items-center justify-between">
           <div className="flex items-center">
-            <TrendingDown className="w-4 h-4 mr-2 text-gray-400" />
-            <span className="text-sm text-gray-400">Consumption</span>
+            <TrendingDown className="w-4 h-4 mr-2 ${textSecondary}" />
+            <span className="text-sm ${textSecondary}">Consumption</span>
           </div>
           <div className="text-right">
             <div className={`text-lg font-mono font-semibold ${
@@ -70,15 +72,15 @@ const FuelSystem = ({ data, hasAnomaly }) => {
             }`}>
               {data.fuelConsumption?.toFixed(1) || 'N/A'}
             </div>
-            <div className="text-xs text-gray-500">GPH</div>
+            <div className="text-xs ${textSecondary}">GPH</div>
           </div>
         </div>
 
         {/* Fuel Pressure */}
         <div className="flex items-center justify-between">
           <div className="flex items-center">
-            <Gauge className="w-4 h-4 mr-2 text-gray-400" />
-            <span className="text-sm text-gray-400">Fuel Pressure</span>
+            <Gauge className="w-4 h-4 mr-2 ${textSecondary}" />
+            <span className="text-sm ${textSecondary}">Fuel Pressure</span>
           </div>
           <div className="text-right">
             <div className={`text-lg font-mono font-semibold ${
@@ -86,15 +88,15 @@ const FuelSystem = ({ data, hasAnomaly }) => {
             }`}>
               {data.fuelPressure?.toFixed(1) || 'N/A'}
             </div>
-            <div className="text-xs text-gray-500">PSI</div>
+            <div className="text-xs ${textSecondary}">PSI</div>
           </div>
         </div>
 
         {/* Fuel Temperature */}
         <div className="flex items-center justify-between">
           <div className="flex items-center">
-            <Thermometer className="w-4 h-4 mr-2 text-gray-400" />
-            <span className="text-sm text-gray-400">Fuel Temp</span>
+            <Thermometer className="w-4 h-4 mr-2 ${textSecondary}" />
+            <span className="text-sm ${textSecondary}">Fuel Temp</span>
           </div>
           <div className="text-right">
             <div className={`text-lg font-mono font-semibold ${
@@ -102,14 +104,14 @@ const FuelSystem = ({ data, hasAnomaly }) => {
             }`}>
               {data.fuelTemperature?.toFixed(1) || 'N/A'}
             </div>
-            <div className="text-xs text-gray-500">°C</div>
+            <div className="text-xs ${textSecondary}">°C</div>
           </div>
         </div>
       </div>
 
       {/* Fuel Level Progress Bar */}
       <div className="mt-4">
-        <div className="flex justify-between text-xs text-gray-400 mb-1">
+        <div className="flex justify-between text-xs ${textSecondary} mb-1">
           <span>Fuel Level</span>
           <span>{data.fuelLevel?.toFixed(1) || 0}%</span>
         </div>
@@ -134,25 +136,25 @@ const FuelSystem = ({ data, hasAnomaly }) => {
             <div className={`w-2 h-2 rounded-full mr-2 ${
               getStatusClass(data.fuelLevel, 20, 100, 20)
             }`}></div>
-            <span className="text-gray-400">Level</span>
+            <span className="${textSecondary}">Level</span>
           </div>
           <div className="flex items-center">
             <div className={`w-2 h-2 rounded-full mr-2 ${
               getStatusClass(data.fuelConsumption, 0, 1000, 1000)
             }`}></div>
-            <span className="text-gray-400">Consumption</span>
+            <span className="${textSecondary}">Consumption</span>
           </div>
           <div className="flex items-center">
             <div className={`w-2 h-2 rounded-full mr-2 ${
               getStatusClass(data.fuelPressure, 10, 50)
             }`}></div>
-            <span className="text-gray-400">Pressure</span>
+            <span className="${textSecondary}">Pressure</span>
           </div>
           <div className="flex items-center">
             <div className={`w-2 h-2 rounded-full mr-2 ${
               getStatusClass(data.fuelTemperature, 0, 50)
             }`}></div>
-            <span className="text-gray-400">Temperature</span>
+            <span className="${textSecondary}">Temperature</span>
           </div>
         </div>
       </div>

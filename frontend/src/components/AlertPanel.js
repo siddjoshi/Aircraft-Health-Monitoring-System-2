@@ -1,5 +1,6 @@
 import React from 'react';
 import { AlertTriangle, XCircle, Info, X } from 'lucide-react';
+import { useThemeClasses } from '../hooks/useThemeClasses';
 
 /**
  * Alert Panel component for displaying real-time alerts and notifications
@@ -11,6 +12,7 @@ import { AlertTriangle, XCircle, Info, X } from 'lucide-react';
  * @version 1.0.0
  */
 const AlertPanel = ({ alerts }) => {
+  const { card, textPrimary, textSecondary } = useThemeClasses();
   const getAlertIcon = (severity) => {
     switch (severity?.toUpperCase()) {
       case 'CRITICAL':
@@ -65,21 +67,21 @@ const AlertPanel = ({ alerts }) => {
                   <h4 className={`font-semibold ${getAlertColor(alert.severity)}`}>
                     {alert.alertType || 'System Alert'}
                   </h4>
-                  <span className="text-xs text-gray-400">
+                  <span className="text-xs ${textSecondary}">
                     {new Date().toLocaleTimeString()}
                   </span>
                 </div>
-                <p className="text-white text-sm mt-1">
+                <p className="${textPrimary} text-sm mt-1">
                   {alert.message}
                 </p>
                 {alert.severity && (
                   <div className="mt-2">
                     <span className={`inline-block px-2 py-1 rounded-full text-xs font-medium ${
                       alert.severity.toUpperCase() === 'CRITICAL' 
-                        ? 'bg-aviation-red text-white' 
+                        ? 'bg-aviation-red ${textPrimary}' 
                         : alert.severity.toUpperCase() === 'WARNING'
-                        ? 'bg-aviation-yellow text-white'
-                        : 'bg-aviation-blue text-white'
+                        ? 'bg-aviation-yellow ${textPrimary}'
+                        : 'bg-aviation-blue ${textPrimary}'
                     }`}>
                       {alert.severity.toUpperCase()}
                     </span>
