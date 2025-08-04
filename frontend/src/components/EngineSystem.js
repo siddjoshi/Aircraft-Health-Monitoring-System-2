@@ -1,5 +1,6 @@
 import React from 'react';
 import { Gauge, Zap, Thermometer, Droplets } from 'lucide-react';
+import { useThemeClasses } from '../hooks/useThemeClasses';
 
 /**
  * Engine System component for displaying engine-related sensor data
@@ -11,6 +12,7 @@ import { Gauge, Zap, Thermometer, Droplets } from 'lucide-react';
  * @version 1.0.0
  */
 const EngineSystem = ({ data, hasAnomaly }) => {
+  const { card, textPrimary, textSecondary } = useThemeClasses();
   const getStatusColor = (value, min, max, criticalMax = null) => {
     if (criticalMax && value > criticalMax) return 'text-aviation-red';
     if (value < min || value > max) return 'text-aviation-yellow';
@@ -24,11 +26,11 @@ const EngineSystem = ({ data, hasAnomaly }) => {
   };
 
   return (
-    <div className={`bg-card-bg border border-border-color rounded-lg p-6 ${
+    <div className={`${card} p-6 ${
       hasAnomaly ? 'border-aviation-red shadow-lg shadow-aviation-red/20' : ''
     }`}>
       <div className="flex items-center justify-between mb-4">
-        <h3 className="text-lg font-semibold text-white flex items-center">
+        <h3 className={`text-lg font-semibold ${textPrimary} flex items-center`}>
           <Zap className="w-5 h-5 mr-2 text-aviation-yellow" />
           Engine System
         </h3>
@@ -45,8 +47,8 @@ const EngineSystem = ({ data, hasAnomaly }) => {
         {/* Engine RPM */}
         <div className="flex items-center justify-between">
           <div className="flex items-center">
-            <Gauge className="w-4 h-4 mr-2 text-gray-400" />
-            <span className="text-sm text-gray-400">Engine RPM</span>
+            <Gauge className={`w-4 h-4 mr-2 ${textSecondary}`} />
+            <span className={`text-sm ${textSecondary}`}>Engine RPM</span>
           </div>
           <div className="text-right">
             <div className={`text-lg font-mono font-semibold ${
@@ -54,15 +56,15 @@ const EngineSystem = ({ data, hasAnomaly }) => {
             }`}>
               {data.engineRPM?.toFixed(0) || 'N/A'}
             </div>
-            <div className="text-xs text-gray-500">RPM</div>
+            <div className="text-xs ${textSecondary}">RPM</div>
           </div>
         </div>
 
         {/* Engine Temperature */}
         <div className="flex items-center justify-between">
           <div className="flex items-center">
-            <Thermometer className="w-4 h-4 mr-2 text-gray-400" />
-            <span className="text-sm text-gray-400">Engine Temp</span>
+            <Thermometer className="w-4 h-4 mr-2 ${textSecondary}" />
+            <span className="text-sm ${textSecondary}">Engine Temp</span>
           </div>
           <div className="text-right">
             <div className={`text-lg font-mono font-semibold ${
@@ -70,15 +72,15 @@ const EngineSystem = ({ data, hasAnomaly }) => {
             }`}>
               {data.engineTemperature?.toFixed(1) || 'N/A'}
             </div>
-            <div className="text-xs text-gray-500">°C</div>
+            <div className="text-xs ${textSecondary}">°C</div>
           </div>
         </div>
 
         {/* Oil Pressure */}
         <div className="flex items-center justify-between">
           <div className="flex items-center">
-            <Droplets className="w-4 h-4 mr-2 text-gray-400" />
-            <span className="text-sm text-gray-400">Oil Pressure</span>
+            <Droplets className="w-4 h-4 mr-2 ${textSecondary}" />
+            <span className="text-sm ${textSecondary}">Oil Pressure</span>
           </div>
           <div className="text-right">
             <div className={`text-lg font-mono font-semibold ${
@@ -86,15 +88,15 @@ const EngineSystem = ({ data, hasAnomaly }) => {
             }`}>
               {data.oilPressure?.toFixed(1) || 'N/A'}
             </div>
-            <div className="text-xs text-gray-500">PSI</div>
+            <div className="text-xs ${textSecondary}">PSI</div>
           </div>
         </div>
 
         {/* Oil Temperature */}
         <div className="flex items-center justify-between">
           <div className="flex items-center">
-            <Thermometer className="w-4 h-4 mr-2 text-gray-400" />
-            <span className="text-sm text-gray-400">Oil Temp</span>
+            <Thermometer className="w-4 h-4 mr-2 ${textSecondary}" />
+            <span className="text-sm ${textSecondary}">Oil Temp</span>
           </div>
           <div className="text-right">
             <div className={`text-lg font-mono font-semibold ${
@@ -102,7 +104,7 @@ const EngineSystem = ({ data, hasAnomaly }) => {
             }`}>
               {data.oilTemperature?.toFixed(1) || 'N/A'}
             </div>
-            <div className="text-xs text-gray-500">°C</div>
+            <div className="text-xs ${textSecondary}">°C</div>
           </div>
         </div>
       </div>
@@ -114,25 +116,25 @@ const EngineSystem = ({ data, hasAnomaly }) => {
             <div className={`w-2 h-2 rounded-full mr-2 ${
               getStatusClass(data.engineRPM, 500, 3000)
             }`}></div>
-            <span className="text-gray-400">RPM</span>
+            <span className="${textSecondary}">RPM</span>
           </div>
           <div className="flex items-center">
             <div className={`w-2 h-2 rounded-full mr-2 ${
               getStatusClass(data.engineTemperature, 0, 200, 200)
             }`}></div>
-            <span className="text-gray-400">Temp</span>
+            <span className="${textSecondary}">Temp</span>
           </div>
           <div className="flex items-center">
             <div className={`w-2 h-2 rounded-full mr-2 ${
               getStatusClass(data.oilPressure, 20, 100)
             }`}></div>
-            <span className="text-gray-400">Oil Press</span>
+            <span className="${textSecondary}">Oil Press</span>
           </div>
           <div className="flex items-center">
             <div className={`w-2 h-2 rounded-full mr-2 ${
               getStatusClass(data.oilTemperature, 0, 120, 120)
             }`}></div>
-            <span className="text-gray-400">Oil Temp</span>
+            <span className="${textSecondary}">Oil Temp</span>
           </div>
         </div>
       </div>

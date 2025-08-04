@@ -1,5 +1,6 @@
 import React from 'react';
 import { CheckCircle, AlertTriangle, XCircle, Activity } from 'lucide-react';
+import { useThemeClasses } from '../hooks/useThemeClasses';
 
 /**
  * System Status component for displaying overall aircraft system status
@@ -11,6 +12,7 @@ import { CheckCircle, AlertTriangle, XCircle, Activity } from 'lucide-react';
  * @version 1.0.0
  */
 const SystemStatus = ({ aircraftData }) => {
+  const { card, textPrimary, textSecondary } = useThemeClasses();
   const systems = [
     {
       name: 'Engine',
@@ -76,9 +78,9 @@ const SystemStatus = ({ aircraftData }) => {
   const anomalySystems = systems.filter(s => s.status === 'anomaly').length;
 
   return (
-    <div className="bg-card-bg border border-border-color rounded-lg p-6">
+    <div className={`${card} p-6`}>
       <div className="flex items-center justify-between mb-6">
-        <h2 className="text-xl font-semibold text-white flex items-center">
+        <h2 className={`text-xl font-semibold ${textPrimary} flex items-center`}>
           <Activity className="w-6 h-6 mr-2 text-aviation-blue" />
           System Status Overview
         </h2>
@@ -93,23 +95,23 @@ const SystemStatus = ({ aircraftData }) => {
 
       {/* Status Summary */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
-        <div className="bg-gray-800 rounded-lg p-4 text-center">
-          <div className="text-2xl font-bold text-white">{totalSystems}</div>
-          <div className="text-sm text-gray-400">Total Systems</div>
+        <div className={`${card} p-4 text-center`}>
+          <div className={`text-2xl font-bold ${textPrimary}`}>{totalSystems}</div>
+          <div className={`text-sm ${textSecondary}`}>Total Systems</div>
         </div>
         <div className="bg-aviation-green/20 border border-aviation-green rounded-lg p-4 text-center">
           <div className="text-2xl font-bold text-aviation-green">{normalSystems}</div>
-          <div className="text-sm text-gray-400">Normal</div>
+          <div className={`text-sm ${textSecondary}`}>Normal</div>
         </div>
         <div className="bg-aviation-red/20 border border-aviation-red rounded-lg p-4 text-center">
           <div className="text-2xl font-bold text-aviation-red">{anomalySystems}</div>
-          <div className="text-sm text-gray-400">Anomalies</div>
+          <div className={`text-sm ${textSecondary}`}>Anomalies</div>
         </div>
         <div className="bg-aviation-blue/20 border border-aviation-blue rounded-lg p-4 text-center">
           <div className="text-2xl font-bold text-aviation-blue">
             {((normalSystems / totalSystems) * 100).toFixed(0)}%
           </div>
-          <div className="text-sm text-gray-400">Health</div>
+          <div className={`text-sm ${textSecondary}`}>Health</div>
         </div>
       </div>
 
@@ -121,21 +123,21 @@ const SystemStatus = ({ aircraftData }) => {
             className={`border rounded-lg p-4 transition-all duration-200 ${
               system.status === 'anomaly' 
                 ? 'border-aviation-red bg-aviation-red/10' 
-                : 'border-border-color bg-gray-800/50'
+                : `${card}`
             }`}
           >
             <div className="flex items-center justify-between mb-2">
               <div className="flex items-center">
                 <span className="text-2xl mr-3">{system.icon}</span>
                 <div>
-                  <h3 className="font-semibold text-white">{system.name}</h3>
-                  <p className="text-xs text-gray-400">{system.description}</p>
+                  <h3 className={`font-semibold ${textPrimary}`}>{system.name}</h3>
+                  <p className={`text-xs ${textSecondary}`}>{system.description}</p>
                 </div>
               </div>
               {getStatusIcon(system.status)}
             </div>
             <div className="flex items-center justify-between">
-              <span className="text-xs text-gray-400">Status</span>
+              <span className={`text-xs ${textSecondary}`}>Status</span>
               <span className={`px-2 py-1 rounded-full text-xs font-medium ${
                 getStatusColor(system.status)
               }`}>
@@ -147,8 +149,8 @@ const SystemStatus = ({ aircraftData }) => {
       </div>
 
       {/* Timestamp */}
-      <div className="mt-6 pt-4 border-t border-border-color">
-        <div className="flex items-center justify-between text-sm text-gray-400">
+      <div className={`mt-6 pt-4 border-t ${textSecondary.includes('gray-400') ? 'border-border-color' : 'border-border-color-light'}`}>
+        <div className={`flex items-center justify-between text-sm ${textSecondary}`}>
           <span>Last System Check</span>
           <span>{new Date(aircraftData.timestamp).toLocaleString()}</span>
         </div>

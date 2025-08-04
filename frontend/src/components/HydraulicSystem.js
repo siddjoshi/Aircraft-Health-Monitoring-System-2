@@ -1,5 +1,6 @@
 import React from 'react';
 import { Gauge, Thermometer, Droplets, Activity } from 'lucide-react';
+import { useThemeClasses } from '../hooks/useThemeClasses';
 
 /**
  * Hydraulic System component for displaying hydraulic-related sensor data
@@ -11,6 +12,7 @@ import { Gauge, Thermometer, Droplets, Activity } from 'lucide-react';
  * @version 1.0.0
  */
 const HydraulicSystem = ({ data, hasAnomaly }) => {
+  const { card, textPrimary, textSecondary } = useThemeClasses();
   const getStatusColor = (value, min, max, criticalMin = null, criticalMax = null) => {
     if (criticalMin && value < criticalMin) return 'text-aviation-red';
     if (criticalMax && value > criticalMax) return 'text-aviation-red';
@@ -26,18 +28,18 @@ const HydraulicSystem = ({ data, hasAnomaly }) => {
   };
 
   return (
-    <div className={`bg-card-bg border border-border-color rounded-lg p-6 ${
+    <div className={`${card} rounded-lg p-6 ${
       hasAnomaly ? 'border-aviation-red shadow-lg shadow-aviation-red/20' : ''
     }`}>
       <div className="flex items-center justify-between mb-4">
-        <h3 className="text-lg font-semibold text-white flex items-center">
+        <h3 className="text-lg font-semibold ${textPrimary} flex items-center">
           <Activity className="w-5 h-5 mr-2 text-aviation-blue" />
           Hydraulic System
         </h3>
         <div className={`px-2 py-1 rounded-full text-xs font-medium ${
           hasAnomaly 
-            ? 'bg-aviation-red text-white' 
-            : 'bg-aviation-green text-white'
+            ? 'bg-aviation-red ${textPrimary}' 
+            : 'bg-aviation-green ${textPrimary}'
         }`}>
           {hasAnomaly ? 'ANOMALY' : 'NORMAL'}
         </div>
@@ -47,8 +49,8 @@ const HydraulicSystem = ({ data, hasAnomaly }) => {
         {/* Hydraulic Pressure */}
         <div className="flex items-center justify-between">
           <div className="flex items-center">
-            <Gauge className="w-4 h-4 mr-2 text-gray-400" />
-            <span className="text-sm text-gray-400">Hydraulic Pressure</span>
+            <Gauge className="w-4 h-4 mr-2 ${textSecondary}" />
+            <span className="text-sm ${textSecondary}">Hydraulic Pressure</span>
           </div>
           <div className="text-right">
             <div className={`text-lg font-mono font-semibold ${
@@ -56,15 +58,15 @@ const HydraulicSystem = ({ data, hasAnomaly }) => {
             }`}>
               {data.hydraulicPressure?.toFixed(0) || 'N/A'}
             </div>
-            <div className="text-xs text-gray-500">PSI</div>
+            <div className="text-xs ${textSecondary}">PSI</div>
           </div>
         </div>
 
         {/* Hydraulic Temperature */}
         <div className="flex items-center justify-between">
           <div className="flex items-center">
-            <Thermometer className="w-4 h-4 mr-2 text-gray-400" />
-            <span className="text-sm text-gray-400">Hydraulic Temp</span>
+            <Thermometer className="w-4 h-4 mr-2 ${textSecondary}" />
+            <span className="text-sm ${textSecondary}">Hydraulic Temp</span>
           </div>
           <div className="text-right">
             <div className={`text-lg font-mono font-semibold ${
@@ -72,15 +74,15 @@ const HydraulicSystem = ({ data, hasAnomaly }) => {
             }`}>
               {data.hydraulicTemperature?.toFixed(1) || 'N/A'}
             </div>
-            <div className="text-xs text-gray-500">°C</div>
+            <div className="text-xs ${textSecondary}">°C</div>
           </div>
         </div>
 
         {/* Hydraulic Fluid Level */}
         <div className="flex items-center justify-between">
           <div className="flex items-center">
-            <Droplets className="w-4 h-4 mr-2 text-gray-400" />
-            <span className="text-sm text-gray-400">Fluid Level</span>
+            <Droplets className="w-4 h-4 mr-2 ${textSecondary}" />
+            <span className="text-sm ${textSecondary}">Fluid Level</span>
           </div>
           <div className="text-right">
             <div className={`text-lg font-mono font-semibold ${
@@ -88,14 +90,14 @@ const HydraulicSystem = ({ data, hasAnomaly }) => {
             }`}>
               {data.hydraulicFluidLevel?.toFixed(1) || 'N/A'}
             </div>
-            <div className="text-xs text-gray-500">%</div>
+            <div className="text-xs ${textSecondary}">%</div>
           </div>
         </div>
       </div>
 
       {/* Pressure Gauge Visualization */}
       <div className="mt-4">
-        <div className="flex justify-between text-xs text-gray-400 mb-1">
+        <div className="flex justify-between text-xs ${textSecondary} mb-1">
           <span>Pressure Range</span>
           <span>{data.hydraulicPressure?.toFixed(0) || 0} PSI</span>
         </div>
@@ -123,7 +125,7 @@ const HydraulicSystem = ({ data, hasAnomaly }) => {
             }}
           ></div>
         </div>
-        <div className="flex justify-between text-xs text-gray-500 mt-1">
+        <div className="flex justify-between text-xs ${textSecondary} mt-1">
           <span>1500</span>
           <span>2000</span>
           <span>2500</span>
@@ -135,7 +137,7 @@ const HydraulicSystem = ({ data, hasAnomaly }) => {
 
       {/* Fluid Level Progress Bar */}
       <div className="mt-4">
-        <div className="flex justify-between text-xs text-gray-400 mb-1">
+        <div className="flex justify-between text-xs ${textSecondary} mb-1">
           <span>Fluid Level</span>
           <span>{data.hydraulicFluidLevel?.toFixed(1) || 0}%</span>
         </div>
@@ -160,19 +162,19 @@ const HydraulicSystem = ({ data, hasAnomaly }) => {
             <div className={`w-2 h-2 rounded-full mr-2 ${
               getStatusClass(data.hydraulicPressure, 2000, 3500, 2000, 3500)
             }`}></div>
-            <span className="text-gray-400">Pressure</span>
+            <span className="${textSecondary}">Pressure</span>
           </div>
           <div className="flex items-center">
             <div className={`w-2 h-2 rounded-full mr-2 ${
               getStatusClass(data.hydraulicTemperature, 0, 80, null, 80)
             }`}></div>
-            <span className="text-gray-400">Temperature</span>
+            <span className="${textSecondary}">Temperature</span>
           </div>
           <div className="flex items-center">
             <div className={`w-2 h-2 rounded-full mr-2 ${
               getStatusClass(data.hydraulicFluidLevel, 80, 100, 80)
             }`}></div>
-            <span className="text-gray-400">Fluid Level</span>
+            <span className="${textSecondary}">Fluid Level</span>
           </div>
         </div>
       </div>

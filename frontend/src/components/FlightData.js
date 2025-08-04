@@ -1,5 +1,6 @@
 import React from 'react';
 import { Plane, Gauge, TrendingUp, Zap } from 'lucide-react';
+import { useThemeClasses } from '../hooks/useThemeClasses';
 
 /**
  * Flight Data component for displaying flight-related sensor data
@@ -11,6 +12,7 @@ import { Plane, Gauge, TrendingUp, Zap } from 'lucide-react';
  * @version 1.0.0
  */
 const FlightData = ({ data, hasAnomaly }) => {
+  const { card, textPrimary, textSecondary } = useThemeClasses();
   const getStatusColor = (value, min, max, criticalMax = null) => {
     if (criticalMax && value > criticalMax) return 'text-aviation-red';
     if (value < min || value > max) return 'text-aviation-yellow';
@@ -24,18 +26,18 @@ const FlightData = ({ data, hasAnomaly }) => {
   };
 
   return (
-    <div className={`bg-card-bg border border-border-color rounded-lg p-6 ${
+    <div className={`${card} rounded-lg p-6 ${
       hasAnomaly ? 'border-aviation-red shadow-lg shadow-aviation-red/20' : ''
     }`}>
       <div className="flex items-center justify-between mb-4">
-        <h3 className="text-lg font-semibold text-white flex items-center">
+        <h3 className="text-lg font-semibold ${textPrimary} flex items-center">
           <Plane className="w-5 h-5 mr-2 text-aviation-blue" />
           Flight Data
         </h3>
         <div className={`px-2 py-1 rounded-full text-xs font-medium ${
           hasAnomaly 
-            ? 'bg-aviation-red text-white' 
-            : 'bg-aviation-green text-white'
+            ? 'bg-aviation-red ${textPrimary}' 
+            : 'bg-aviation-green ${textPrimary}'
         }`}>
           {hasAnomaly ? 'ANOMALY' : 'NORMAL'}
         </div>
@@ -45,8 +47,8 @@ const FlightData = ({ data, hasAnomaly }) => {
         {/* Altitude */}
         <div className="flex items-center justify-between">
           <div className="flex items-center">
-            <TrendingUp className="w-4 h-4 mr-2 text-gray-400" />
-            <span className="text-sm text-gray-400">Altitude</span>
+            <TrendingUp className="w-4 h-4 mr-2 ${textSecondary}" />
+            <span className="text-sm ${textSecondary}">Altitude</span>
           </div>
           <div className="text-right">
             <div className={`text-lg font-mono font-semibold ${
@@ -54,15 +56,15 @@ const FlightData = ({ data, hasAnomaly }) => {
             }`}>
               {data.altitude?.toFixed(0) || 'N/A'}
             </div>
-            <div className="text-xs text-gray-500">ft</div>
+            <div className="text-xs ${textSecondary}">ft</div>
           </div>
         </div>
 
         {/* Airspeed */}
         <div className="flex items-center justify-between">
           <div className="flex items-center">
-            <Gauge className="w-4 h-4 mr-2 text-gray-400" />
-            <span className="text-sm text-gray-400">Airspeed</span>
+            <Gauge className="w-4 h-4 mr-2 ${textSecondary}" />
+            <span className="text-sm ${textSecondary}">Airspeed</span>
           </div>
           <div className="text-right">
             <div className={`text-lg font-mono font-semibold ${
@@ -70,29 +72,29 @@ const FlightData = ({ data, hasAnomaly }) => {
             }`}>
               {data.airspeed?.toFixed(0) || 'N/A'}
             </div>
-            <div className="text-xs text-gray-500">knots</div>
+            <div className="text-xs ${textSecondary}">knots</div>
           </div>
         </div>
 
         {/* Ground Speed */}
         <div className="flex items-center justify-between">
           <div className="flex items-center">
-            <Plane className="w-4 h-4 mr-2 text-gray-400" />
-            <span className="text-sm text-gray-400">Ground Speed</span>
+            <Plane className="w-4 h-4 mr-2 ${textSecondary}" />
+            <span className="text-sm ${textSecondary}">Ground Speed</span>
           </div>
           <div className="text-right">
-            <div className="text-lg font-mono font-semibold text-white">
+            <div className="text-lg font-mono font-semibold ${textPrimary}">
               {data.groundSpeed?.toFixed(0) || 'N/A'}
             </div>
-            <div className="text-xs text-gray-500">knots</div>
+            <div className="text-xs ${textSecondary}">knots</div>
           </div>
         </div>
 
         {/* Mach Number */}
         <div className="flex items-center justify-between">
           <div className="flex items-center">
-            <Zap className="w-4 h-4 mr-2 text-gray-400" />
-            <span className="text-sm text-gray-400">Mach Number</span>
+            <Zap className="w-4 h-4 mr-2 ${textSecondary}" />
+            <span className="text-sm ${textSecondary}">Mach Number</span>
           </div>
           <div className="text-right">
             <div className={`text-lg font-mono font-semibold ${
@@ -100,15 +102,15 @@ const FlightData = ({ data, hasAnomaly }) => {
             }`}>
               {data.machNumber?.toFixed(3) || 'N/A'}
             </div>
-            <div className="text-xs text-gray-500">Mach</div>
+            <div className="text-xs ${textSecondary}">Mach</div>
           </div>
         </div>
 
         {/* Vertical Speed */}
         <div className="flex items-center justify-between">
           <div className="flex items-center">
-            <TrendingUp className="w-4 h-4 mr-2 text-gray-400" />
-            <span className="text-sm text-gray-400">Vertical Speed</span>
+            <TrendingUp className="w-4 h-4 mr-2 ${textSecondary}" />
+            <span className="text-sm ${textSecondary}">Vertical Speed</span>
           </div>
           <div className="text-right">
             <div className={`text-lg font-mono font-semibold ${
@@ -116,14 +118,14 @@ const FlightData = ({ data, hasAnomaly }) => {
             }`}>
               {data.verticalSpeed?.toFixed(0) || 'N/A'}
             </div>
-            <div className="text-xs text-gray-500">ft/min</div>
+            <div className="text-xs ${textSecondary}">ft/min</div>
           </div>
         </div>
       </div>
 
       {/* Altitude Visualization */}
       <div className="mt-4">
-        <div className="flex justify-between text-xs text-gray-400 mb-1">
+        <div className="flex justify-between text-xs ${textSecondary} mb-1">
           <span>Altitude Range</span>
           <span>{data.altitude?.toFixed(0) || 0} ft</span>
         </div>
@@ -149,7 +151,7 @@ const FlightData = ({ data, hasAnomaly }) => {
             }}
           ></div>
         </div>
-        <div className="flex justify-between text-xs text-gray-500 mt-1">
+        <div className="flex justify-between text-xs ${textSecondary} mt-1">
           <span>0</span>
           <span>10k</span>
           <span>20k</span>
@@ -161,7 +163,7 @@ const FlightData = ({ data, hasAnomaly }) => {
 
       {/* Airspeed Visualization */}
       <div className="mt-4">
-        <div className="flex justify-between text-xs text-gray-400 mb-1">
+        <div className="flex justify-between text-xs ${textSecondary} mb-1">
           <span>Airspeed Range</span>
           <span>{data.airspeed?.toFixed(0) || 0} knots</span>
         </div>
@@ -177,7 +179,7 @@ const FlightData = ({ data, hasAnomaly }) => {
             style={{ width: `${Math.min((data.airspeed / 700) * 100, 100) || 0}%` }}
           ></div>
         </div>
-        <div className="flex justify-between text-xs text-gray-500 mt-1">
+        <div className="flex justify-between text-xs ${textSecondary} mt-1">
           <span>0</span>
           <span>200</span>
           <span>400</span>
@@ -193,25 +195,25 @@ const FlightData = ({ data, hasAnomaly }) => {
             <div className={`w-2 h-2 rounded-full mr-2 ${
               getStatusClass(data.altitude, 0, 45000, 45000)
             }`}></div>
-            <span className="text-gray-400">Altitude</span>
+            <span className="${textSecondary}">Altitude</span>
           </div>
           <div className="flex items-center">
             <div className={`w-2 h-2 rounded-full mr-2 ${
               getStatusClass(data.airspeed, 0, 600, 600)
             }`}></div>
-            <span className="text-gray-400">Airspeed</span>
+            <span className="${textSecondary}">Airspeed</span>
           </div>
           <div className="flex items-center">
             <div className={`w-2 h-2 rounded-full mr-2 ${
               getStatusClass(data.machNumber, 0, 0.9, 0.9)
             }`}></div>
-            <span className="text-gray-400">Mach</span>
+            <span className="${textSecondary}">Mach</span>
           </div>
           <div className="flex items-center">
             <div className={`w-2 h-2 rounded-full mr-2 ${
               getStatusClass(Math.abs(data.verticalSpeed), 0, 5000, 5000)
             }`}></div>
-            <span className="text-gray-400">V/S</span>
+            <span className="${textSecondary}">V/S</span>
           </div>
         </div>
       </div>
