@@ -1,12 +1,16 @@
 package com.aircraft.monitoring.controller;
 
+import com.aircraft.monitoring.dto.AlertRequest;
 import com.aircraft.monitoring.model.AircraftData;
 import com.aircraft.monitoring.service.DataSimulationService;
 import com.aircraft.monitoring.service.WebSocketService;
+import com.aircraft.monitoring.util.InputSanitizer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import lombok.extern.slf4j.Slf4j;
+
+import jakarta.validation.Valid;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -33,6 +37,9 @@ public class AircraftController {
     
     @Autowired
     private WebSocketService webSocketService;
+    
+    @Autowired
+    private InputSanitizer inputSanitizer;
     
     /**
      * Gets the current aircraft sensor data
@@ -152,24 +159,34 @@ public class AircraftController {
     }
     
     /**
-     * Sends a custom alert to all connected clients
+     * Sends a custom alert to all connected clients with comprehensive validation and sanitization.
      * 
-     * @param alertRequest The alert request containing type, message, and severity
+     * @param alertRequest The validated alert request containing type, message, and severity
      * @return Success response
      */
     @PostMapping("/alert")
-    public ResponseEntity<Map<String, String>> sendAlert(@RequestBody Map<String, String> alertRequest) {
-        String alertType = alertRequest.get("type");
-        String message = alertRequest.get("message");
-        String severity = alertRequest.getOrDefault("severity", "INFO");
+    public ResponseEntity<Map<String, String>> sendAlert(@Valid @RequestBody AlertRequest alertRequest) {
+        // Additional security validation beyond Bean Validation
+        if (!inputSanitizer.isInputSafe(alertRequest.getMessage())) {
+            log.warn("Potentially malicious alert message blocked: {}", alertRequest.getMessage());
+            throw new SecurityException("Alert message contains potentially dangerous content");
+        }
         
-        webSocketService.broadcastAlert(alertType, message, severity);
+        // Sanitize inputs even after validation for extra security
+        String sanitizedType = inputSanitizer.sanitizeAlertType(alertRequest.getType());
+        String sanitizedMessage = inputSanitizer.sanitizeText(alertRequest.getMessage());
+        String sanitizedSeverity = inputSanitizer.sanitizeSeverity(alertRequest.getSeverity());
+        
+        // Broadcast the sanitized alert
+        webSocketService.broadcastAlert(sanitizedType, sanitizedMessage, sanitizedSeverity);
         
         Map<String, String> response = new HashMap<>();
         response.put("message", "Alert sent successfully");
         response.put("status", "success");
+        response.put("alertType", sanitizedType);
+        response.put("severity", sanitizedSeverity);
         
-        log.info("Custom alert sent: {} - {}", alertType, message);
+        log.info("Validated alert sent: {} - {} ({})", sanitizedType, sanitizedMessage, sanitizedSeverity);
         return ResponseEntity.ok(response);
     }
 } 
