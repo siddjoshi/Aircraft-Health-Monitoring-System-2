@@ -65,7 +65,48 @@ The application will start on `http://localhost:8080`
 
 ### Alerts
 
-- `POST /api/aircraft/alert` - Send custom alert
+- `POST /api/aircraft/alert` - Send custom alert with validation
+
+#### Alert Request Format
+```json
+{
+  "type": "ENGINE",      // Required: Uppercase letters and underscores only (2-50 chars)
+  "message": "Alert message",  // Required: 5-500 characters
+  "severity": "WARNING"   // Required: INFO, WARNING, or CRITICAL
+}
+```
+
+#### Security Features
+- **Input Validation**: All inputs are validated using Bean Validation
+- **Input Sanitization**: XSS and injection attack prevention
+- **Content Security**: Malicious content detection and blocking
+- **Error Handling**: Comprehensive validation error responses
+
+## Security
+
+The Aircraft Health Monitoring System implements comprehensive security measures to protect against common web vulnerabilities:
+
+### Input Validation
+- **Bean Validation**: All user inputs are validated using Jakarta Bean Validation annotations
+- **Type Safety**: Strong typing with dedicated DTOs instead of generic Map objects
+- **Length Constraints**: Configurable min/max length validation for all text fields
+- **Pattern Matching**: Regex validation for alert types and severity levels
+
+### Input Sanitization
+- **XSS Prevention**: Automatic removal of HTML tags and script content
+- **Injection Protection**: Detection and blocking of malicious patterns
+- **Content Filtering**: Removal of potentially dangerous characters and sequences
+- **Safe Defaults**: Fallback to safe values for invalid inputs
+
+### Security Validation
+- **Malicious Content Detection**: Advanced pattern matching for injection attempts
+- **Real-time Blocking**: Immediate rejection of dangerous content with 403 responses
+- **Security Logging**: Comprehensive logging of security incidents for monitoring
+
+### Error Handling
+- **Global Exception Handler**: Centralized validation error processing
+- **Structured Responses**: Consistent error response format with detailed field-level errors
+- **Security-conscious Messages**: Non-revealing error messages to prevent information disclosure
 
 ## WebSocket
 
