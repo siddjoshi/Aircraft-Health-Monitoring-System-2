@@ -241,6 +241,7 @@ npm test
 - [Backend Documentation](./backend/README.md)
 - [Frontend Documentation](./frontend/README.md)
 - [API Documentation](./docs/API.md)
+- [CORS Security Configuration](./docs/CORS-Security.md)
 
 ## 🤝 Contributing
 
